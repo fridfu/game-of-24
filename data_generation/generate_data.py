@@ -3,20 +3,24 @@ import random
 import json
 from solve_24 import get_prob, solve
 
-NUM_DATASET = 1000
-SAVE_DIR = '../data/validation.json'
+NUM_DATASET = int(input("Input number of data to be generated..."))
+SAVE_DIR = input("Input name of dataset...")
+SAVE_DIR = f"output/{SAVE_DIR}"
 
-def construct_data(question, answer):
+def construct_data(problem, steps):
     return {
-        "id": "identity_0",
-        "conversations": [
+        "messages": [
             {
-                "from": "user",
-                "value": question
+                "role": "system",
+                "content": "You are a helpful assistant."
             },
             {
-                "from": "assistant",
-                "value": answer
+                "role": "user",
+                "content": problem
+            },
+            {
+                "role": "assistant",
+                "content": steps
             }
         ]
     }
