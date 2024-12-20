@@ -3,8 +3,23 @@ import random
 import json
 from solve_24 import get_prob, solve
 
-NUM_DATASET = 10
-SAVE_DIR = '../data/test.json'
+NUM_DATASET = 1000
+SAVE_DIR = '../data/validation.json'
+
+def construct_data(question, answer):
+    return {
+        "id": "identity_0",
+        "conversations": [
+            {
+                "from": "user",
+                "value": question
+            },
+            {
+                "from": "assistant",
+                "value": answer
+            }
+        ]
+    }
 
 count = 0
 data = []
@@ -13,7 +28,7 @@ while count < NUM_DATASET:
     problem = get_prob(nums)
     success, steps = solve(nums)
     if success:
-        data.append({'input': problem, 'output': steps})
+        data.append(construct_data(problem, steps))
         count += 1
 
 with open(SAVE_DIR, 'w') as json_file:
