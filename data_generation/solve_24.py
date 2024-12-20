@@ -44,6 +44,7 @@ def game_of_24(nums):
     return ["No solution"]
 
 # Example usage
-nums = [1, 5, 2, 4]
-solution = game_of_24(nums)
-print(' --> '.join(solution))
+if __name__ == "__main__":
+    nums = [1, 5, 2, 4]
+    solution = game_of_24(nums)
+    print(' --> '.join(solution))
