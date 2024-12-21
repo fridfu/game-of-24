@@ -1,0 +1,149 @@
+CUDA_VISIBLE_DEVICES=0 swift sft \
+    --model_type qwen2_5-1_5b-instruct \
+    --model_id_or_path qwen/Qwen2.5-1.5B-Instruct \
+    --dataset success_24.json#1200 train_few_shot.json train_value.json train_propose.json\
+    --logging_steps 5 \
+    --max_length 2048 \
+    --learning_rate 1e-4 \
+    --output_dir output \
+    --lora_target_modules ALL \
+    --model_name 24solver \
+    --model_author fridfu \
+    --system "You are a helpful assistant."
+
+CUDA_VISIBLE_DEVICES=0 swift sft \
+    --model_type qwen2_5-1_5b-instruct \
+    --model_id_or_path qwen/Qwen2.5-1.5B-Instruct \
+    --dataset success_24.json#900 train_few_shot.json\
+    --logging_steps 5 \
+    --max_length 2048 \
+    --learning_rate 1e-4 \
+    --output_dir output \
+    --lora_target_modules ALL \
+    --model_name 24solver \
+    --model_author fridfu \
+    --system "You are a helpful assistant."
+
+CUDA_VISIBLE_DEVICES=0 swift export \
+    --model_type qwen2_5-1_5b-instruct \
+    --ckpt_dir ‘root/output/qwen2_5-1_5b-instruct/v1-20241220-224919/checkpoint-618' \
+    --quant_bits 4 \
+    --quant_method gptq
+
+CUDA_VISIBLE_DEVICES=0 swift infer \
+    --model_type qwen2_5-7b-instruct \
+    --val_dataset /root/data/value_infer_test.json
+
+CUDA_VISIBLE_DEVICES=0 swift infer \
+    --ckpt_dir /root/data/output/qwen2_5-1_5b-instruct/v0-20241221-164138/checkpoint-133 \
+    --val_dataset /root/data/validation_mixed.json
+
+CUDA_VISIBLE_DEVICES=0 swift infer \
+    --ckpt_dir /root/data/output/qwen2_5-1_5b-instruct/v2-20241221-223854/checkpoint-150 \
+    --val_dataset /root/data/validation_mixed.json
+
+{"messages": [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "Solve 5, 1, 2, 4 to get 24."}]}
+
+CUDA_VISIBLE_DEVICES=0 \
+swift infer \
+    --model_type qwen2_5-1_5b-instruct \
+    --infer_backend pt \
+    --stream true
+
+INFO:swift] The logging file will be saved in: /root/data/output/qwen2_5-1_5b-instruct/v2-20241221-223854/logging.jsonl
+{'loss': 0.55687475, 'acc': 0.80810308, 'grad_norm': 1.14954078, 'learning_rate': 6.67e-06, 'memory(GiB)': 6.4, 'train_speed(iter/s)': 0.144282, 'epoch': 0.0, 'global_step/max_steps': '1/300', 'percentage': '0.33%', 'elapsed_time': '6s', 'remaining_time': '33m 1s'}
+{'loss': 0.63509965, 'acc': 0.74696809, 'grad_norm': 1.71061599, 'learning_rate': 3.333e-05, 'memory(GiB)': 7.55, 'train_speed(iter/s)': 0.173409, 'epoch': 0.02, 'global_step/max_steps': '5/300', 'percentage': '1.67%', 'elapsed_time': '28s', 'remaining_time': '28m 3s'}
+{'loss': 0.59592137, 'acc': 0.77002139, 'grad_norm': 0.9542352, 'learning_rate': 6.667e-05, 'memory(GiB)': 7.55, 'train_speed(iter/s)': 0.178775, 'epoch': 0.03, 'global_step/max_steps': '10/300', 'percentage': '3.33%', 'elapsed_time': '55s', 'remaining_time': '26m 53s'}
+{'loss': 0.36974804, 'acc': 0.83790045, 'grad_norm': 0.59089297, 'learning_rate': 0.0001, 'memory(GiB)': 8.71, 'train_speed(iter/s)': 0.180486, 'epoch': 0.05, 'global_step/max_steps': '15/300', 'percentage': '5.00%', 'elapsed_time': '1m 22s', 'remaining_time': '26m 13s'}
+{'loss': 0.25718803, 'acc': 0.88223104, 'grad_norm': 0.54169267, 'learning_rate': 9.992e-05, 'memory(GiB)': 8.71, 'train_speed(iter/s)': 0.181461, 'epoch': 0.07, 'global_step/max_steps': '20/300', 'percentage': '6.67%', 'elapsed_time': '1m 49s', 'remaining_time': '25m 38s'}
+{'loss': 0.15893326, 'acc': 0.9100955, 'grad_norm': 0.46544906, 'learning_rate': 9.97e-05, 'memory(GiB)': 8.71, 'train_speed(iter/s)': 0.18203, 'epoch': 0.08, 'global_step/max_steps': '25/300', 'percentage': '8.33%', 'elapsed_time': '2m 17s', 'remaining_time': '25m 7s'}
+{'loss': 0.12560858, 'acc': 0.89677553, 'grad_norm': 0.39370158, 'learning_rate': 9.932e-05, 'memory(GiB)': 8.71, 'train_speed(iter/s)': 0.182485, 'epoch': 0.1, 'global_step/max_steps': '30/300', 'percentage': '10.00%', 'elapsed_time': '2m 44s', 'remaining_time': '24m 36s'}
+{'loss': 0.1119988, 'acc': 0.88755302, 'grad_norm': 0.30707636, 'learning_rate': 9.879e-05, 'memory(GiB)': 8.72, 'train_speed(iter/s)': 0.182606, 'epoch': 0.12, 'global_step/max_steps': '35/300', 'percentage': '11.67%', 'elapsed_time': '3m 11s', 'remaining_time': '24m 8s'}
+{'loss': 0.10223098, 'acc': 0.92725801, 'grad_norm': 0.44339007, 'learning_rate': 9.811e-05, 'memory(GiB)': 8.72, 'train_speed(iter/s)': 0.182835, 'epoch': 0.13, 'global_step/max_steps': '40/300', 'percentage': '13.33%', 'elapsed_time': '3m 38s', 'remaining_time': '23m 40s'}
+{'loss': 0.09457494, 'acc': 0.89773998, 'grad_norm': 0.46067059, 'learning_rate': 9.729e-05, 'memory(GiB)': 8.72, 'train_speed(iter/s)': 0.182841, 'epoch': 0.15, 'global_step/max_steps': '45/300', 'percentage': '15.00%', 'elapsed_time': '4m 5s', 'remaining_time': '23m 12s'}
+{'loss': 0.09568001, 'acc': 0.90630178, 'grad_norm': 0.45870775, 'learning_rate': 9.632e-05, 'memory(GiB)': 9.89, 'train_speed(iter/s)': 0.182923, 'epoch': 0.17, 'global_step/max_steps': '50/300', 'percentage': '16.67%', 'elapsed_time': '4m 33s', 'remaining_time': '22m 45s'}
+Train:  17%|███████████████▌                                                                             | 50/300 [04:33<22:42,  5.45s/it]
+{'eval_loss': 0.22038169, 'eval_acc': 0.95894754, 'eval_runtime': 4.1157, 'eval_samples_per_second': 11.663, 'eval_steps_per_second': 11.663, 'epoch': 0.17, 'global_step/max_steps': '50/300', 'percentage': '16.67%', 'elapsed_time': '4m 37s', 'remaining_time': '23m 5s'}
+Val: 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 48/48 [00:03<00:00, 12.34it/s]
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+[INFO:swift] Saving model checkpoint to /root/data/output/qwen2_5-1_5b-instruct/v2-20241221-223854/checkpoint-50
+{'loss': 0.08706892, 'acc': 0.94472895, 'grad_norm': 0.38096732, 'learning_rate': 9.522e-05, 'memory(GiB)': 9.89, 'train_speed(iter/s)': 0.180251, 'epoch': 0.18, 'global_step/max_steps': '55/300', 'percentage': '18.33%', 'elapsed_time': '5m 4s', 'remaining_time': '22m 37s'}
+{'loss': 0.08343294, 'acc': 0.92916498, 'grad_norm': 0.27425009, 'learning_rate': 9.397e-05, 'memory(GiB)': 9.89, 'train_speed(iter/s)': 0.180469, 'epoch': 0.2, 'global_step/max_steps': '60/300', 'percentage': '20.00%', 'elapsed_time': '5m 32s', 'remaining_time': '22m 8s'}
+{'loss': 0.08261261, 'acc': 0.90318661, 'grad_norm': 0.31186944, 'learning_rate': 9.26e-05, 'memory(GiB)': 9.89, 'train_speed(iter/s)': 0.180879, 'epoch': 0.22, 'global_step/max_steps': '65/300', 'percentage': '21.67%', 'elapsed_time': '5m 59s', 'remaining_time': '21m 38s'}
+{'loss': 0.0827256, 'acc': 0.9153347, 'grad_norm': 0.2220213, 'learning_rate': 9.109e-05, 'memory(GiB)': 9.89, 'train_speed(iter/s)': 0.181076, 'epoch': 0.23, 'global_step/max_steps': '70/300', 'percentage': '23.33%', 'elapsed_time': '6m 26s', 'remaining_time': '21m 9s'}
+{'loss': 0.07749161, 'acc': 0.89821291, 'grad_norm': 0.29187781, 'learning_rate': 8.946e-05, 'memory(GiB)': 9.89, 'train_speed(iter/s)': 0.181197, 'epoch': 0.25, 'global_step/max_steps': '75/300', 'percentage': '25.00%', 'elapsed_time': '6m 53s', 'remaining_time': '20m 40s'}
+{'loss': 0.07711698, 'acc': 0.86952028, 'grad_norm': 0.39072365, 'learning_rate': 8.771e-05, 'memory(GiB)': 9.89, 'train_speed(iter/s)': 0.181252, 'epoch': 0.27, 'global_step/max_steps': '80/300', 'percentage': '26.67%', 'elapsed_time': '7m 21s', 'remaining_time': '20m 12s'}
+{'loss': 0.07759184, 'acc': 0.94375143, 'grad_norm': 0.2491965, 'learning_rate': 8.584e-05, 'memory(GiB)': 9.89, 'train_speed(iter/s)': 0.181285, 'epoch': 0.28, 'global_step/max_steps': '85/300', 'percentage': '28.33%', 'elapsed_time': '7m 48s', 'remaining_time': '19m 45s'}
+{'loss': 0.07393562, 'acc': 0.95447931, 'grad_norm': 0.24703825, 'learning_rate': 8.386e-05, 'memory(GiB)': 9.89, 'train_speed(iter/s)': 0.18135, 'epoch': 0.3, 'global_step/max_steps': '90/300', 'percentage': '30.00%', 'elapsed_time': '8m 15s', 'remaining_time': '19m 17s'}
+{'loss': 0.07200531, 'acc': 0.92587986, 'grad_norm': 0.22839776, 'learning_rate': 8.179e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.181456, 'epoch': 0.32, 'global_step/max_steps': '95/300', 'percentage': '31.67%', 'elapsed_time': '8m 43s', 'remaining_time': '18m 49s'}
+{'loss': 0.07983148, 'acc': 0.91971979, 'grad_norm': 0.26180509, 'learning_rate': 7.961e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.180997, 'epoch': 0.33, 'global_step/max_steps': '100/300', 'percentage': '33.33%', 'elapsed_time': '9m 12s', 'remaining_time': '18m 24s'}
+Train:  33%|██████████████████████████████▋                                                             | 100/300 [09:12<19:49,  5.95s/it]
+{'eval_loss': 0.18197732, 'eval_acc': 0.96433666, 'eval_runtime': 4.3297, 'eval_samples_per_second': 11.086, 'eval_steps_per_second': 11.086, 'epoch': 0.33, 'global_step/max_steps': '100/300', 'percentage': '33.33%', 'elapsed_time': '9m 16s', 'remaining_time': '18m 33s'}
+Val: 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 48/48 [00:04<00:00, 11.94it/s]
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+[INFO:swift] Saving model checkpoint to /root/data/output/qwen2_5-1_5b-instruct/v2-20241221-223854/checkpoint-100
+{'loss': 0.07107577, 'acc': 0.95306416, 'grad_norm': 0.26177052, 'learning_rate': 7.735e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.179525, 'epoch': 0.35, 'global_step/max_steps': '105/300', 'percentage': '35.00%', 'elapsed_time': '9m 44s', 'remaining_time': '18m 5s'}
+{'loss': 0.07193115, 'acc': 0.93218422, 'grad_norm': 0.29244676, 'learning_rate': 7.5e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.179546, 'epoch': 0.37, 'global_step/max_steps': '110/300', 'percentage': '36.67%', 'elapsed_time': '10m 12s', 'remaining_time': '17m 37s'}
+{'loss': 0.07467436, 'acc': 0.88853188, 'grad_norm': 0.27080414, 'learning_rate': 7.258e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.179591, 'epoch': 0.38, 'global_step/max_steps': '115/300', 'percentage': '38.33%', 'elapsed_time': '10m 40s', 'remaining_time': '17m 9s'}
+{'loss': 0.07051987, 'acc': 0.92355623, 'grad_norm': 0.33735794, 'learning_rate': 7.008e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.179645, 'epoch': 0.4, 'global_step/max_steps': '120/300', 'percentage': '40.00%', 'elapsed_time': '11m 7s', 'remaining_time': '16m 41s'}
+{'loss': 0.06883692, 'acc': 0.9145051, 'grad_norm': 0.24559373, 'learning_rate': 6.753e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.179673, 'epoch': 0.42, 'global_step/max_steps': '125/300', 'percentage': '41.67%', 'elapsed_time': '11m 35s', 'remaining_time': '16m 13s'}
+{'loss': 0.07306409, 'acc': 0.92090549, 'grad_norm': 0.2702474, 'learning_rate': 6.493e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.179771, 'epoch': 0.43, 'global_step/max_steps': '130/300', 'percentage': '43.33%', 'elapsed_time': '12m 2s', 'remaining_time': '15m 45s'}
+{'loss': 0.07070283, 'acc': 0.93598747, 'grad_norm': 0.26007533, 'learning_rate': 6.227e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.179909, 'epoch': 0.45, 'global_step/max_steps': '135/300', 'percentage': '45.00%', 'elapsed_time': '12m 30s', 'remaining_time': '15m 16s'}
+{'loss': 0.07013869, 'acc': 0.91525593, 'grad_norm': 0.20311187, 'learning_rate': 5.959e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.179981, 'epoch': 0.47, 'global_step/max_steps': '140/300', 'percentage': '46.67%', 'elapsed_time': '12m 57s', 'remaining_time': '14m 48s'}
+{'loss': 0.07181764, 'acc': 0.92069006, 'grad_norm': 0.26078054, 'learning_rate': 5.687e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.180081, 'epoch': 0.48, 'global_step/max_steps': '145/300', 'percentage': '48.33%', 'elapsed_time': '13m 24s', 'remaining_time': '14m 20s'}
+{'loss': 0.06999275, 'acc': 0.93287001, 'grad_norm': 0.21034373, 'learning_rate': 5.413e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.180184, 'epoch': 0.5, 'global_step/max_steps': '150/300', 'percentage': '50.00%', 'elapsed_time': '13m 52s', 'remaining_time': '13m 52s'}
+Train:  50%|██████████████████████████████████████████████                                              | 150/300 [13:52<13:39,  5.46s/it]
+{'eval_loss': 0.15538165, 'eval_acc': 0.96687272, 'eval_runtime': 4.2359, 'eval_samples_per_second': 11.332, 'eval_steps_per_second': 11.332, 'epoch': 0.5, 'global_step/max_steps': '150/300', 'percentage': '50.00%', 'elapsed_time': '13m 56s', 'remaining_time': '13m 56s'}
+Val: 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 48/48 [00:04<00:00, 11.99it/s]
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+[INFO:swift] Saving model checkpoint to /root/data/output/qwen2_5-1_5b-instruct/v2-20241221-223854/checkpoint-150
+{'loss': 0.07463118, 'acc': 0.88475924, 'grad_norm': 0.21949796, 'learning_rate': 5.138e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.179015, 'epoch': 0.52, 'global_step/max_steps': '155/300', 'percentage': '51.67%', 'elapsed_time': '14m 25s', 'remaining_time': '13m 29s'}
+{'loss': 0.06890709, 'acc': 0.9210186, 'grad_norm': 0.22485462, 'learning_rate': 4.862e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.178894, 'epoch': 0.53, 'global_step/max_steps': '160/300', 'percentage': '53.33%', 'elapsed_time': '14m 54s', 'remaining_time': '13m 2s'}
+{'loss': 0.07062685, 'acc': 0.90679379, 'grad_norm': 0.21446624, 'learning_rate': 4.587e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.178127, 'epoch': 0.55, 'global_step/max_steps': '165/300', 'percentage': '55.00%', 'elapsed_time': '15m 26s', 'remaining_time': '12m 37s'}
+{'loss': 0.07260791, 'acc': 0.9325551, 'grad_norm': 0.31160545, 'learning_rate': 4.313e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.178128, 'epoch': 0.57, 'global_step/max_steps': '170/300', 'percentage': '56.67%', 'elapsed_time': '15m 54s', 'remaining_time': '12m 9s'}
+{'loss': 0.06678064, 'acc': 0.92084723, 'grad_norm': 0.28860965, 'learning_rate': 4.041e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.177792, 'epoch': 0.58, 'global_step/max_steps': '175/300', 'percentage': '58.33%', 'elapsed_time': '16m 24s', 'remaining_time': '11m 42s'}
+{'loss': 0.06206804, 'acc': 0.94111862, 'grad_norm': 0.19373733, 'learning_rate': 3.773e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.177861, 'epoch': 0.6, 'global_step/max_steps': '180/300', 'percentage': '60.00%', 'elapsed_time': '16m 51s', 'remaining_time': '11m 14s'}
+{'loss': 0.0675282, 'acc': 0.93476591, 'grad_norm': 0.473075, 'learning_rate': 3.507e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.176888, 'epoch': 0.61, 'global_step/max_steps': '185/300', 'percentage': '61.67%', 'elapsed_time': '17m 25s', 'remaining_time': '10m 49s'}
+{'loss': 0.06621756, 'acc': 0.92286263, 'grad_norm': 0.19547103, 'learning_rate': 3.247e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.176908, 'epoch': 0.63, 'global_step/max_steps': '190/300', 'percentage': '63.33%', 'elapsed_time': '17m 53s', 'remaining_time': '10m 21s'}
+{'loss': 0.06943367, 'acc': 0.94249907, 'grad_norm': 0.19183047, 'learning_rate': 2.992e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.175895, 'epoch': 0.65, 'global_step/max_steps': '195/300', 'percentage': '65.00%', 'elapsed_time': '18m 28s', 'remaining_time': '9m 56s'}
+{'loss': 0.06900266, 'acc': 0.93325262, 'grad_norm': 0.16750191, 'learning_rate': 2.742e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.176004, 'epoch': 0.66, 'global_step/max_steps': '200/300', 'percentage': '66.67%', 'elapsed_time': '18m 56s', 'remaining_time': '9m 28s'}
+Train:  67%|█████████████████████████████████████████████████████████████▎                              | 200/300 [18:56<09:32,  5.72s/it]
+{'eval_loss': 0.17454636, 'eval_acc': 0.9657632, 'eval_runtime': 4.4391, 'eval_samples_per_second': 10.813, 'eval_steps_per_second': 10.813, 'epoch': 0.66, 'global_step/max_steps': '200/300', 'percentage': '66.67%', 'elapsed_time': '19m 0s', 'remaining_time': '9m 30s'}
+Val: 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 48/48 [00:04<00:00, 11.71it/s]
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+[INFO:swift] Saving model checkpoint to /root/data/output/qwen2_5-1_5b-instruct/v2-20241221-223854/checkpoint-200
+{'loss': 0.06081297, 'acc': 0.9569169, 'grad_norm': 0.20211153, 'learning_rate': 2.5e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.17477, 'epoch': 0.68, 'global_step/max_steps': '205/300', 'percentage': '68.33%', 'elapsed_time': '19m 32s', 'remaining_time': '9m 3s'}
+{'loss': 0.06619647, 'acc': 0.94009848, 'grad_norm': 0.40623385, 'learning_rate': 2.265e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.174753, 'epoch': 0.7, 'global_step/max_steps': '210/300', 'percentage': '70.00%', 'elapsed_time': '20m 1s', 'remaining_time': '8m 34s'}
+{'loss': 0.06314215, 'acc': 0.93430386, 'grad_norm': 0.20760405, 'learning_rate': 2.039e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.174324, 'epoch': 0.71, 'global_step/max_steps': '215/300', 'percentage': '71.67%', 'elapsed_time': '20m 33s', 'remaining_time': '8m 7s'}
+{'loss': 0.0628139, 'acc': 0.89088001, 'grad_norm': 0.3286919, 'learning_rate': 1.821e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.174516, 'epoch': 0.73, 'global_step/max_steps': '220/300', 'percentage': '73.33%', 'elapsed_time': '21m 0s', 'remaining_time': '7m 38s'}
+{'loss': 0.06554996, 'acc': 0.92329016, 'grad_norm': 0.19796513, 'learning_rate': 1.614e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.174464, 'epoch': 0.75, 'global_step/max_steps': '225/300', 'percentage': '75.00%', 'elapsed_time': '21m 29s', 'remaining_time': '7m 9s'}
+{'loss': 0.06158113, 'acc': 0.95859232, 'grad_norm': 0.20830496, 'learning_rate': 1.416e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.174378, 'epoch': 0.76, 'global_step/max_steps': '230/300', 'percentage': '76.67%', 'elapsed_time': '21m 58s', 'remaining_time': '6m 41s'}
+{'loss': 0.06397915, 'acc': 0.91462469, 'grad_norm': 0.2468245, 'learning_rate': 1.229e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.174405, 'epoch': 0.78, 'global_step/max_steps': '235/300', 'percentage': '78.33%', 'elapsed_time': '22m 27s', 'remaining_time': '6m 12s'}
+{'loss': 0.05972282, 'acc': 0.92744122, 'grad_norm': 0.36932474, 'learning_rate': 1.054e-05, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.174476, 'epoch': 0.8, 'global_step/max_steps': '240/300', 'percentage': '80.00%', 'elapsed_time': '22m 55s', 'remaining_time': '5m 43s'}
+{'loss': 0.06182884, 'acc': 0.93531713, 'grad_norm': 0.65627563, 'learning_rate': 8.91e-06, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.174543, 'epoch': 0.81, 'global_step/max_steps': '245/300', 'percentage': '81.67%', 'elapsed_time': '23m 23s', 'remaining_time': '5m 15s'}
+{'loss': 0.06807492, 'acc': 0.92695112, 'grad_norm': 0.20496421, 'learning_rate': 7.4e-06, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.174571, 'epoch': 0.83, 'global_step/max_steps': '250/300', 'percentage': '83.33%', 'elapsed_time': '23m 51s', 'remaining_time': '4m 46s'}
+Train:  83%|████████████████████████████████████████████████████████████████████████████▋               | 250/300 [23:51<04:43,  5.67s/it]
+{'eval_loss': 0.16031414, 'eval_acc': 0.96782374, 'eval_runtime': 4.2537, 'eval_samples_per_second': 11.284, 'eval_steps_per_second': 11.284, 'epoch': 0.83, 'global_step/max_steps': '250/300', 'percentage': '83.33%', 'elapsed_time': '23m 56s', 'remaining_time': '4m 47s'}
+Val: 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 48/48 [00:04<00:00, 11.93it/s]
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+[INFO:swift] Saving model checkpoint to /root/data/output/qwen2_5-1_5b-instruct/v2-20241221-223854/checkpoint-250
+{'loss': 0.06921437, 'acc': 0.9307786, 'grad_norm': 0.20124844, 'learning_rate': 6.03e-06, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.173085, 'epoch': 0.85, 'global_step/max_steps': '255/300', 'percentage': '85.00%', 'elapsed_time': '24m 32s', 'remaining_time': '4m 19s'}
+{'loss': 0.06510219, 'acc': 0.92923145, 'grad_norm': 0.21744014, 'learning_rate': 4.78e-06, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.173217, 'epoch': 0.86, 'global_step/max_steps': '260/300', 'percentage': '86.67%', 'elapsed_time': '25m 0s', 'remaining_time': '3m 50s'}
+{'loss': 0.06273118, 'acc': 0.9600132, 'grad_norm': 0.25050715, 'learning_rate': 3.68e-06, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.172825, 'epoch': 0.88, 'global_step/max_steps': '265/300', 'percentage': '88.33%', 'elapsed_time': '25m 33s', 'remaining_time': '3m 22s'}
+{'loss': 0.06647159, 'acc': 0.90290928, 'grad_norm': 0.27905467, 'learning_rate': 2.71e-06, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.172936, 'epoch': 0.9, 'global_step/max_steps': '270/300', 'percentage': '90.00%', 'elapsed_time': '26m 0s', 'remaining_time': '2m 53s'}
+{'loss': 0.0677207, 'acc': 0.91923943, 'grad_norm': 0.18392348, 'learning_rate': 1.89e-06, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.173011, 'epoch': 0.91, 'global_step/max_steps': '275/300', 'percentage': '91.67%', 'elapsed_time': '26m 29s', 'remaining_time': '2m 24s'}
+{'loss': 0.06022175, 'acc': 0.9490737, 'grad_norm': 0.28818077, 'learning_rate': 1.21e-06, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.173162, 'epoch': 0.93, 'global_step/max_steps': '280/300', 'percentage': '93.33%', 'elapsed_time': '26m 56s', 'remaining_time': '1m 55s'}
+{'loss': 0.05784571, 'acc': 0.94828262, 'grad_norm': 0.24582267, 'learning_rate': 6.8e-07, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.173281, 'epoch': 0.95, 'global_step/max_steps': '285/300', 'percentage': '95.00%', 'elapsed_time': '27m 24s', 'remaining_time': '1m 26s'}
+{'loss': 0.06013444, 'acc': 0.95568485, 'grad_norm': 0.16885424, 'learning_rate': 3e-07, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.173421, 'epoch': 0.96, 'global_step/max_steps': '290/300', 'percentage': '96.67%', 'elapsed_time': '27m 51s', 'remaining_time': '57s'}
+{'loss': 0.06066967, 'acc': 0.93101015, 'grad_norm': 0.41160101, 'learning_rate': 8e-08, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.173522, 'epoch': 0.98, 'global_step/max_steps': '295/300', 'percentage': '98.33%', 'elapsed_time': '28m 19s', 'remaining_time': '28s'}
+{'loss': 0.06237756, 'acc': 0.91839771, 'grad_norm': 0.19856186, 'learning_rate': 0.0, 'memory(GiB)': 11.14, 'train_speed(iter/s)': 0.173634, 'epoch': 1.0, 'global_step/max_steps': '300/300', 'percentage': '100.00%', 'elapsed_time': '28m 47s', 'remaining_time': '0s'}
+Train: 100%|████████████████████████████████████████████████████████████████████████████████████████████| 300/300 [28:47<00:00,  5.54s/it]
+{'eval_loss': 0.15902765, 'eval_acc': 0.96798225, 'eval_runtime': 4.4024, 'eval_samples_per_second': 10.903, 'eval_steps_per_second': 10.903, 'epoch': 1.0, 'global_step/max_steps': '300/300', 'percentage': '100.00%', 'elapsed_time': '28m 51s', 'remaining_time': '0s'}
+Val: 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 48/48 [00:04<00:00, 11.58it/s]
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+[INFO:swift] Saving model checkpoint to /root/data/output/qwen2_5-1_5b-instruct/v2-20241221-223854/checkpoint-300
+{'train_runtime': 1732.3676, 'train_samples_per_second': 2.779, 'train_steps_per_second': 0.173, 'train_loss': 0.09986501, 'epoch': 1.0, 'global_step/max_steps': '300/300', 'percentage': '100.00%', 'elapsed_time': '28m 52s', 'remaining_time': '0s'}
+Train: 100%|████████████████████████████████████████████████████████████████████████████████████████████| 300/300 [28:52<00:00,  5.77s/it]
+[INFO:swift] last_model_checkpoint: /root/data/output/qwen2_5-1_5b-instruct/v2-20241221-223854/checkpoint-300
+[INFO:swift] best_model_checkpoint: /root/data/output/qwen2_5-1_5b-instruct/v2-20241221-223854/checkpoint-150
+[INFO:swift] images_dir: /root/data/output/qwen2_5-1_5b-instruct/v2-20241221-223854/images
